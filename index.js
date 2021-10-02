@@ -1,7 +1,8 @@
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const jwt = require('jsonwebtoken');
-
+const helmet = require('helmet');
+const cors = require('cors');
 const db = require('./src/db');
 const models = require('./src/models');
 const typeDefs = require('./src/schema');
@@ -14,6 +15,9 @@ const DB_HOST = process.env.DB_HOST;
 const port = process.env.PORT || 4000;
 
 const app = express();
+app.use(helmet());
+app.use(cors());
+
 db.connect(DB_HOST);
 
 const getUser = (token) => {
@@ -32,7 +36,6 @@ const server = new ApolloServer({
   context: ({ req }) => {
     const token = req.headers.authorization;
     const user = getUser(token);
-    console.log(user);
     return { models, user };
   },
 });
