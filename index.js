@@ -3,6 +3,9 @@ const { ApolloServer } = require('apollo-server-express');
 const jwt = require('jsonwebtoken');
 const helmet = require('helmet');
 const cors = require('cors');
+const depthLimit = require('graphql-depth-limit');
+const { createComplexityLimitRule } = require('graphql-validation-complexity');
+
 const db = require('./src/db');
 const models = require('./src/models');
 const typeDefs = require('./src/schema');
@@ -12,7 +15,7 @@ require('dotenv').config();
 const colors = require('colors');
 
 const DB_HOST = process.env.DB_HOST;
-const port = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000;
 
 const app = express();
 app.use(helmet());
@@ -33,6 +36,7 @@ const getUser = (token) => {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  validationRules: [depthLimit(5), createComplexityLimitRule(1000)],
   context: ({ req }) => {
     const token = req.headers.authorization;
     const user = getUser(token);
@@ -42,8 +46,8 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app, path: '/api' });
 
-app.listen({ port }, () => {
+app.listen(PORT, () => {
   console.log(
-    `🚀 GraphQL Server running at http://localhost:${port}${server.graphqlPath}`
+    `🚀 GraphQL Server running at http://localhost:${PORT}${server.graphqlPath}`
   );
 });
