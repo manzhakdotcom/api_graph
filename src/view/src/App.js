@@ -1,16 +1,13 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Pages from './pages';
 
-function App() {
-  const name = 'Adam';
-  const now = String(new Date());
+const App = () => {
   return (
     <div className='App'>
-      <p>Hello {name}</p>
-      <p>The current time is {now}</p>
-      <p>Two plus two is {2 + 2}</p>
+      <Pages />
     </div>
   );
-}
+};
 
 export default App;
