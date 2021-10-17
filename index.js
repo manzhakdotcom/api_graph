@@ -18,10 +18,10 @@ const DB_HOST = process.env.DB_HOST;
 const PORT = process.env.PORT || 4000;
 
 const app = express();
-app.use(helmet());
-app.use(cors());
 
 db.connect(DB_HOST);
+
+app.use(cors());
 
 const getUser = (token) => {
   if (token) {
