@@ -1,5 +1,7 @@
 import React from 'react';
 import { useQuery, gql } from '@apollo/client';
+import NoteFeed from '../components/NoteFeed';
+import { Button } from 'react-bootstrap';
 
 const GET_NOTES = gql`
   query noteFeed($cursor: String) {
@@ -21,18 +23,40 @@ const GET_NOTES = gql`
   }
 `;
 const Home = () => {
-  const { data, loading, error } = useQuery(GET_NOTES);
+  const { data, loading, error, fetchMore } = useQuery(GET_NOTES);
+  console.log(data);
   if (error) return <p>Error!</p>;
+  if (loading) return <p>Loading...</p>;
   return (
     <div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        data.noteFeed.notes.map((note) => (
-          <div key={note.id}>{note.author.username}</div>
-        ))
+      <NoteFeed notes={data.noteFeed.notes} />
+      {data.noteFeed.hasNextPage && (
+        <Button
+          variant='dark'
+          onClick={() => {
+            fetchMore({
+              variables: {
+                cursor: data.noteFeed.cursor,
+              },
+              updateQuery: (previousResult, { fetchMoreResult }) => {
+                return {
+                  noteFeed: {
+                    cursor: fetchMoreResult.noteFeed.cursor,
+                    hasNextPage: fetchMoreResult.noteFeed.hasNextPage,
+                    notes: [
+                      ...previousResult.noteFeed.notes,
+                      ...fetchMoreResult.noteFeed.notes,
+                    ],
+                    __typename: 'noteFeed',
+                  },
+                };
+              },
+            });
+          }}
+        >
+          Load more
+        </Button>
       )}
-      <p>This is home page</p>
     </div>
   );
 };

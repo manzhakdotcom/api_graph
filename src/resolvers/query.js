@@ -16,7 +16,7 @@ module.exports = {
     return await models.User.findById(user.id);
   },
   noteFeed: async (parent, { cursor }, { models }) => {
-    const limit = 3;
+    const limit = 2;
     let hasNextPage = false;
     let cursorQuery = {};
     if (cursor) {
