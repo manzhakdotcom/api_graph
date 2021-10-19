@@ -21,6 +21,9 @@ const Navigation = () => {
             <LinkContainer to='/favorites'>
               <Nav.Link>Favorites</Nav.Link>
             </LinkContainer>
+            <LinkContainer to='/singup'>
+              <Nav.Link>Singup</Nav.Link>
+            </LinkContainer>
           </Nav>
         </Navbar.Collapse>
       </Container>
