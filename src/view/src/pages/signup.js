@@ -1,17 +1,9 @@
 import React, { useEffect } from 'react';
-import { useMutation, useApolloClient, gql } from '@apollo/client';
+import { useMutation, useApolloClient } from '@apollo/client';
 import UserForm from '../components/UserForm';
+import { SIGNUP_USER } from '../gql/mutation';
+import { IS_LOGGED_IN } from '../gql/query';
 
-const SIGNUP_USER = gql`
-  mutation signUp($email: String!, $username: String!, $password: String!) {
-    signUp(email: $email, username: $username, password: $password)
-  }
-`;
-const IS_LOGGED_IN = gql`
-  {
-    isLoggedIn @client
-  }
-`;
 const SignUp = ({ history }) => {
   useEffect(() => {
     document.title = 'Sign Up - Notedly';

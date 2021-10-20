@@ -1,11 +1,11 @@
 import React from 'react';
+import { IS_LOGGED_IN } from './gql/query';
 
 import {
   ApolloClient,
   ApolloProvider,
   createHttpLink,
   InMemoryCache,
-  gql,
 } from '@apollo/client';
 import { setContext } from 'apollo-link-context';
 
@@ -36,20 +36,12 @@ const data = {
   isLoggedIn: !!localStorage.getItem('token'),
 };
 cache.writeQuery({
-  query: gql`
-    {
-      isLoggedIn @client
-    }
-  `,
+  query: IS_LOGGED_IN,
   data,
 });
 client.onResetStore(() =>
   cache.writeQuery({
-    query: gql`
-      {
-        isLoggedIn @client
-      }
-    `,
+    query: IS_LOGGED_IN,
     data,
   })
 );
