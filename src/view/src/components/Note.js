@@ -3,7 +3,6 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 
 const Note = ({ note, index }) => {
-  console.log(note);
   return (
     <tr>
       <td>{index + 1}</td>

@@ -17,7 +17,7 @@ const Pages = () => {
         <Route path='/mynotes' component={MyNotes} />
         <Route path='/favorites' component={Favorites} />
         <Route path='/note/:id' component={NotePage} />
-        <Route path='/singup' component={SignUp} />
+        <Route path='/signup' component={SignUp} />
       </Layout>
     </Router>
   );

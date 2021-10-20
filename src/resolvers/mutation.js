@@ -57,7 +57,7 @@ module.exports = {
       }
     );
   },
-  singUp: async (parent, { username, email, password }, { models }) => {
+  signUp: async (parent, { username, email, password }, { models }) => {
     email = email.trim().toLowerCase();
     const hashed = await bcrypt.hash(password, 10);
     const avatar = gravatar(email);
@@ -75,7 +75,7 @@ module.exports = {
       throw new Error('Error creating account!');
     }
   },
-  singIn: async (parent, { username, email, password }, { models }) => {
+  signIn: async (parent, { username, email, password }, { models }) => {
     if (email) {
       email = email.trim().toLowerCase();
     }
