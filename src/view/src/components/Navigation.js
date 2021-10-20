@@ -2,7 +2,16 @@ import React from 'react';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
-const Navigation = () => {
+import { useQuery, gql } from '@apollo/client';
+
+const IS_LOGGED_IN = gql`
+  {
+    isLoggedIn @client
+  }
+`;
+
+const Navigation = (props) => {
+  const { data, client } = useQuery(IS_LOGGED_IN);
   return (
     <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect>
       <Container>
@@ -21,9 +30,30 @@ const Navigation = () => {
             <LinkContainer to='/favorites'>
               <Nav.Link>Favorites</Nav.Link>
             </LinkContainer>
-            <LinkContainer to='/signup'>
-              <Nav.Link>Signup</Nav.Link>
-            </LinkContainer>
+            {data.isLoggedIn ? (
+              <LinkContainer to='/'>
+                <Nav.Link>Log Out</Nav.Link>
+              </LinkContainer>
+            ) : (
+              <React.Fragment>
+                <LinkContainer
+                  onClick={() => {
+                    localStorage.removeItem('token');
+                    client.resetStore();
+                    client.writeQuery({
+                      query: IS_LOGGED_IN,
+                      data: { isLoggedIn: false },
+                    });
+                    props.history.push('/');
+                  }}
+                >
+                  <Nav.Link>Signup</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to='/signup'>
+                  <Nav.Link>Signup</Nav.Link>
+                </LinkContainer>
+              </React.Fragment>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
